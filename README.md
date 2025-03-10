@@ -74,7 +74,6 @@ The app will open in your default web browser. Follow the on-screen instructions
 - File content is extracted using dedicated libraries for each file type.
 - The internal prompts are designed to produce consistent and structured outputs.
 - Oversized files are automatically split into chunks to avoid exceeding API limits, and the chunk outputs are merged to form the final summary.
-
----
-
-Feel free to modify or extend this README as needed to better suit your project's requirements or to add any additional details.
+- There is no database to maintain the data, so if your refresh the webpage, all the data is gone.
+- The idea was discussed and verified with Professor Michael Spertus.
+- Make sure you replace the OpenAI API Key with your own in the "llm.py".
