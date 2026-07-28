@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import pytest
 
+import config
 from config import ConfigurationError, get_settings
 
 
 def _clear_settings(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(config, "load_dotenv", lambda: False)
     for name in (
         "OPENAI_API_KEY",
         "OPENAI_CHAT_MODEL",
@@ -61,4 +63,3 @@ def test_invalid_top_k(monkeypatch, tmp_path):
     monkeypatch.setenv("RETRIEVAL_TOP_K", "0")
     with pytest.raises(ConfigurationError, match="positive"):
         get_settings(require_api_key=False)
-

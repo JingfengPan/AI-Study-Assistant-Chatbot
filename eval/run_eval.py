@@ -211,7 +211,9 @@ def _run_item(
 
     judge_payload = None
     judge_error = None
-    if not skip_judge:
+    # Judge the production RAG output by default. The stuffing baseline remains a
+    # deterministic cost/token comparison and does not need a second model pass.
+    if not skip_judge and mode == "rag":
         try:
             judge_payload = asdict(
                 judge_answer(
@@ -500,4 +502,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
