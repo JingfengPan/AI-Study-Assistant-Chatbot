@@ -16,6 +16,6 @@ cache/
 logs/
 *.jsonl
 .streamlit-*.log
+eval/results.json
 .DS_Store
 Thumbs.db
-

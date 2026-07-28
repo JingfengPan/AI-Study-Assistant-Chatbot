@@ -106,8 +106,12 @@ def _call_text(
         "max_output_tokens": max_output_tokens,
         "store": False,
     }
-    # Current GPT-5-family reasoning models may constrain sampling parameters.
-    if not model.lower().startswith("gpt-5"):
+    # Current GPT-5-family reasoning models constrain sampling parameters. A low
+    # effort/verbosity baseline keeps this latency-sensitive study workflow compact.
+    if model.lower().startswith("gpt-5"):
+        kwargs["reasoning"] = {"effort": "low"}
+        kwargs["text"] = {"verbosity": "low"}
+    else:
         kwargs["temperature"] = temperature
     started = time.perf_counter()
     response = _request_response(client, **kwargs)
@@ -380,4 +384,3 @@ def authoritative_source_mapping(
         for number, result in enumerate(retrieved_results, start=1)
         if number in allowed
     ]
-
