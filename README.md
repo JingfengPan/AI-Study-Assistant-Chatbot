@@ -89,8 +89,8 @@ fail closed after at most one repair attempt.
 
 ## Measured results
 
-The 2026-07-28 API run shows that RAG retrieved an accepted source in the first
-result for every answerable question, produced valid and source-accurate
+The recorded API evaluation shows that RAG retrieved an accepted source in the
+first result for every answerable question, produced valid and source-accurate
 citations for every answered question, and correctly handled every answerable
 and unanswerable case. It reduced mean input tokens by 35.0% versus stuffing.
 

@@ -887,7 +887,7 @@ Schema:
   },
   {
     "id": "q026",
-    "question": "Who won the 2026 World Cup?",
+    "question": "Who won the World Cup?",
     "expected_answer": null,
     "expected_sources": [],
     "answerable": false,

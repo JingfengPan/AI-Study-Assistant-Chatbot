@@ -8,7 +8,6 @@ import json
 import statistics
 import time
 from dataclasses import asdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -365,7 +364,6 @@ def _write_markdown(
     lines = [
         "# Evaluation Results",
         "",
-        f"- Date: {datetime.now(timezone.utc).isoformat()}",
         f"- Chat/judge model: `{settings.chat_model}`",
         f"- Embedding model: `{settings.embedding_model}`",
         f"- Answer prompt: `{ANSWER_PROMPT_VERSION}`",

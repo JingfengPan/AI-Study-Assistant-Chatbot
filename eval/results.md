@@ -1,6 +1,5 @@
 # Evaluation Results
 
-- Date: 2026-07-28T07:40:25.022667+00:00
 - Chat/judge model: `gpt-5.6-terra`
 - Embedding model: `text-embedding-3-small`
 - Answer prompt: `rag-answer-v1`
