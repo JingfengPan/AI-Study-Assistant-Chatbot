@@ -1,0 +1,257 @@
+[
+  {
+    "id": "q001",
+    "question": "What prerequisite does binary search have, and how does it reduce the search space?",
+    "expected_answer": "It requires sorted input and halves the remaining interval at each step.",
+    "expected_sources": [{"file": "algorithms_notes.pdf", "location": "Page 1"}],
+    "answerable": true,
+    "notes": "Both facts appear together on the search page."
+  },
+  {
+    "id": "q002",
+    "question": "What are merge sort's worst-case time and auxiliary-space complexities?",
+    "expected_answer": "O(n log n) time and O(n) auxiliary space.",
+    "expected_sources": [{"file": "algorithms_notes.pdf", "location": "Page 2"}],
+    "answerable": true,
+    "notes": "Complexities are explicit on the sorting page."
+  },
+  {
+    "id": "q003",
+    "question": "Which graph traversal finds shortest paths in unweighted graphs, and what data structure does it use?",
+    "expected_answer": "Breadth-first search, using a queue.",
+    "expected_sources": [{"file": "algorithms_notes.pdf", "location": "Page 3"}],
+    "answerable": true,
+    "notes": "The graph page states both details."
+  },
+  {
+    "id": "q004",
+    "question": "How do memoization and tabulation differ?",
+    "expected_answer": "Memoization is top-down, while tabulation is bottom-up.",
+    "expected_sources": [{"file": "algorithms_notes.pdf", "location": "Page 4"}],
+    "answerable": true,
+    "notes": "Direct comparison on the dynamic-programming page."
+  },
+  {
+    "id": "q005",
+    "question": "How does separate chaining handle hash collisions?",
+    "expected_answer": "It stores colliding keys in per-bucket collections.",
+    "expected_sources": [{"file": "algorithms_notes.pdf", "location": "Page 5"}],
+    "answerable": true,
+    "notes": "Collision strategy is explicit."
+  },
+  {
+    "id": "q006",
+    "question": "What is the difference between a primary key and a foreign key?",
+    "expected_answer": "A primary key uniquely identifies a row; a foreign key references a key in another table.",
+    "expected_sources": [{"file": "database_slides.pptx", "location": "Slide 1"}],
+    "answerable": true,
+    "notes": "Both definitions are on the relational-foundations slide."
+  },
+  {
+    "id": "q007",
+    "question": "What dependency does third normal form remove?",
+    "expected_answer": "Transitive dependencies on non-key attributes.",
+    "expected_sources": [{"file": "database_slides.pptx", "location": "Slide 2"}],
+    "answerable": true,
+    "notes": "Direct definition of 3NF."
+  },
+  {
+    "id": "q008",
+    "question": "What four properties make up ACID?",
+    "expected_answer": "Atomicity, consistency, isolation, and durability.",
+    "expected_sources": [{"file": "database_slides.pptx", "location": "Slide 3"}],
+    "answerable": true,
+    "notes": "The acronym is expanded on the transactions slide."
+  },
+  {
+    "id": "q009",
+    "question": "What operations does a B-tree index support efficiently?",
+    "expected_answer": "Logarithmic search and range queries.",
+    "expected_sources": [{"file": "database_slides.pptx", "location": "Slide 4"}],
+    "answerable": true,
+    "notes": "Both operations are explicit."
+  },
+  {
+    "id": "q010",
+    "question": "How does a left join differ from an inner join?",
+    "expected_answer": "A left join retains unmatched rows from the left table; an inner join returns matching rows.",
+    "expected_sources": [{"file": "database_slides.pptx", "location": "Slide 5"}],
+    "answerable": true,
+    "notes": "The join behavior is compared directly."
+  },
+  {
+    "id": "q011",
+    "question": "Which application-layer services are named in the networking handout?",
+    "expected_answer": "HTTP and DNS.",
+    "expected_sources": [{"file": "networking_handout.docx", "location": "Paragraph 2"}],
+    "answerable": true,
+    "notes": "The application-layer paragraph names both."
+  },
+  {
+    "id": "q012",
+    "question": "What delivery guarantees does TCP provide?",
+    "expected_answer": "Reliable, ordered byte delivery over a connection-oriented service.",
+    "expected_sources": [{"file": "networking_handout.docx", "location": "Paragraph 5"}],
+    "answerable": true,
+    "notes": "TCP properties are explicit."
+  },
+  {
+    "id": "q013",
+    "question": "Does IP guarantee reliable delivery?",
+    "expected_answer": "No. IP provides best-effort datagram delivery without a reliability guarantee.",
+    "expected_sources": [{"file": "networking_handout.docx", "location": "Paragraph 7"}],
+    "answerable": true,
+    "notes": "Directly stated in the IP paragraph."
+  },
+  {
+    "id": "q014",
+    "question": "What information do Ethernet switches learn to forward frames?",
+    "expected_answer": "MAC address tables.",
+    "expected_sources": [{"file": "networking_handout.docx", "location": "Paragraph 9"}],
+    "answerable": true,
+    "notes": "The Ethernet paragraph names the table."
+  },
+  {
+    "id": "q015",
+    "question": "What does DNS translate, and what kind of architecture does it use?",
+    "expected_answer": "It translates domain names into IP addresses using a distributed hierarchy.",
+    "expected_sources": [{"file": "networking_handout.docx", "location": "Paragraph 10"}],
+    "answerable": true,
+    "notes": "Both facts are in the DNS paragraph."
+  },
+  {
+    "id": "q016",
+    "question": "How do a population and a sample differ?",
+    "expected_answer": "A population is the complete group of interest; a sample is the observed subset.",
+    "expected_sources": [{"file": "study_guide.txt", "location": "Lines 1-20"}],
+    "answerable": true,
+    "notes": "Definitions appear near the start of the statistics section."
+  },
+  {
+    "id": "q017",
+    "question": "Why can the median be more robust than the mean?",
+    "expected_answer": "An outlier influences the mean more strongly than the median.",
+    "expected_sources": [{"file": "study_guide.txt", "location": "Lines 1-20"}],
+    "answerable": true,
+    "notes": "Outlier sensitivity is explicit."
+  },
+  {
+    "id": "q018",
+    "question": "What is the distinction between classification and regression?",
+    "expected_answer": "Classification predicts categories; regression predicts numeric values.",
+    "expected_sources": [{"file": "study_guide.txt", "location": "Lines 21-40"}],
+    "answerable": true,
+    "notes": "Direct comparison in the machine-learning section."
+  },
+  {
+    "id": "q019",
+    "question": "How do precision and recall differ?",
+    "expected_answer": "Precision is the fraction of predicted positives that are correct; recall is the fraction of actual positives found.",
+    "expected_sources": [{"file": "study_guide.txt", "location": "Lines 21-40"}],
+    "answerable": true,
+    "notes": "Both metric definitions are adjacent."
+  },
+  {
+    "id": "q020",
+    "question": "What must a reproducible experiment record?",
+    "expected_answer": "Data, code, parameters, and random seeds.",
+    "expected_sources": [{"file": "study_guide.txt", "location": "Lines 21-40"}],
+    "answerable": true,
+    "notes": "The final line lists the required artifacts."
+  },
+  {
+    "id": "q021",
+    "question": "Compare the search behavior of binary search and a B-tree index.",
+    "expected_answer": "Binary search halves a sorted interval, while a B-tree index supports logarithmic search and efficient range queries.",
+    "expected_sources": [
+      {"file": "algorithms_notes.pdf", "location": "Page 1"},
+      {"file": "database_slides.pptx", "location": "Slide 4"}
+    ],
+    "answerable": true,
+    "notes": "Requires evidence from the algorithms and database documents."
+  },
+  {
+    "id": "q022",
+    "question": "Contrast TCP's reliability with IP's delivery model.",
+    "expected_answer": "TCP provides reliable ordered byte delivery, whereas IP provides best-effort datagrams without a reliability guarantee.",
+    "expected_sources": [
+      {"file": "networking_handout.docx", "location": "Paragraph 5"},
+      {"file": "networking_handout.docx", "location": "Paragraph 7"}
+    ],
+    "answerable": true,
+    "notes": "Combines two separated networking paragraphs."
+  },
+  {
+    "id": "q023",
+    "question": "Which techniques avoid repeated subproblem work in algorithms and estimate generalization in machine learning?",
+    "expected_answer": "Dynamic programming stores solutions to overlapping subproblems, while cross-validation rotates held-out folds to estimate generalization.",
+    "expected_sources": [
+      {"file": "algorithms_notes.pdf", "location": "Page 4"},
+      {"file": "study_guide.txt", "location": "Lines 21-40"}
+    ],
+    "answerable": true,
+    "notes": "Requires synthesis across algorithms and machine learning."
+  },
+  {
+    "id": "q024",
+    "question": "How do queues appear in both algorithmic traversal and network communication?",
+    "expected_answer": "Breadth-first search uses a queue; HTTP uses client-server request-response communication, not a traversal queue.",
+    "expected_sources": [
+      {"file": "algorithms_notes.pdf", "location": "Page 3"},
+      {"file": "networking_handout.docx", "location": "Paragraph 3"}
+    ],
+    "answerable": true,
+    "notes": "Tests a careful cross-domain contrast without inventing a network queue."
+  },
+  {
+    "id": "q025",
+    "question": "Identify one technique for reducing confounding in experiments and one database property that preserves completed data.",
+    "expected_answer": "Random assignment helps balance confounders, and ACID durability preserves completed transaction effects.",
+    "expected_sources": [
+      {"file": "study_guide.txt", "location": "Lines 1-20"},
+      {"file": "database_slides.pptx", "location": "Slide 3"}
+    ],
+    "answerable": true,
+    "notes": "Cross-document synthesis from statistics and transactions."
+  },
+  {
+    "id": "q026",
+    "question": "What date is the final exam?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false,
+    "notes": "No scheduling information exists in the corpus."
+  },
+  {
+    "id": "q027",
+    "question": "Who invented the Python programming language?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false,
+    "notes": "General knowledge that is absent from all documents."
+  },
+  {
+    "id": "q028",
+    "question": "What is the tuition for this course?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false,
+    "notes": "No financial information exists in the corpus."
+  },
+  {
+    "id": "q029",
+    "question": "Which cloud provider hosts the application?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false,
+    "notes": "Deployment infrastructure is not described."
+  },
+  {
+    "id": "q030",
+    "question": "What score did the student receive on the homework?",
+    "expected_answer": null,
+    "expected_sources": [],
+    "answerable": false,
+    "notes": "No student grades or personal records are present."
+  }
+]
