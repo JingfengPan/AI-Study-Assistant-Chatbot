@@ -15,6 +15,8 @@ def test_golden_set_has_reviewed_distribution():
     assert sum(item["answerable"] for item in items) == 25
     assert sum(not item["answerable"] for item in items) == 5
     assert sum(len(item["expected_sources"]) > 1 for item in items) == 5
+    q024 = next(item for item in items if item["id"] == "q024")
+    assert "HTTP's interaction pattern" in q024["question"]
 
 
 def test_all_evaluation_formats_extract_exact_locations():

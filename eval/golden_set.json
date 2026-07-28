@@ -194,14 +194,14 @@
   },
   {
     "id": "q024",
-    "question": "How do queues appear in both algorithmic traversal and network communication?",
+    "question": "Compare breadth-first search's use of a queue with HTTP's interaction pattern.",
     "expected_answer": "Breadth-first search uses a queue; HTTP uses client-server request-response communication, not a traversal queue.",
     "expected_sources": [
       {"file": "algorithms_notes.pdf", "location": "Page 3"},
       {"file": "networking_handout.docx", "location": "Paragraph 3"}
     ],
     "answerable": true,
-    "notes": "Tests a careful cross-domain contrast without inventing a network queue."
+    "notes": "Cross-document contrast phrased without implying that HTTP uses a queue."
   },
   {
     "id": "q025",

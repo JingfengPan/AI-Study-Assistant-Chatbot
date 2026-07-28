@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import json
 import statistics
 import time
@@ -43,6 +44,17 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--output-json", type=Path)
     parser.add_argument("--top-k", type=int)
     parser.add_argument("--limit", type=int)
+    parser.add_argument(
+        "--ids",
+        nargs="+",
+        help="Run only the listed golden-set IDs (for example: --ids q024 q025).",
+    )
+    parser.add_argument(
+        "--resume-json",
+        type=Path,
+        help="Merge selected reruns into a prior JSON result set.",
+    )
+    parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--skip-judge", action="store_true")
     return parser.parse_args()
 
@@ -404,20 +416,22 @@ def _write_markdown(
     lines.extend(["", "## Failure examples", ""])
     if not failures:
         lines.append("No failures under the reported automatic criteria.")
-    for row in failures[:10]:
-        lines.extend(
-            [
-                f"### {row['mode'].title()} · {row['id']}",
-                "",
-                f"**Question:** {row['question']}",
-                "",
-                f"**Answer:** {row['answer']}",
-                "",
-                f"Reference match: {row['reference_match']}; "
-                f"Recall@4: {row['recall_at_4'] if row['mode'] == 'rag' else 'N/A'}",
-                "",
-            ]
-        )
+    for mode in (aggregate["mode"] for aggregate in aggregates):
+        for row in [failure for failure in failures if failure["mode"] == mode][:5]:
+            lines.extend(
+                [
+                    f"### {row['mode'].title()} · {row['id']}",
+                    "",
+                    f"**Question:** {row['question']}",
+                    "",
+                    f"**Answer:** {row['answer']}",
+                    "",
+                    f"Reference match: {row['reference_match']}; "
+                    f"Recall@4: "
+                    f"{row['recall_at_4'] if row['mode'] == 'rag' else 'N/A'}",
+                    "",
+                ]
+            )
 
     lines.extend(
         [
@@ -443,7 +457,22 @@ def main() -> None:
     top_k = args.top_k or settings.retrieval_top_k
     if top_k <= 0:
         raise ValueError("--top-k must be positive.")
-    items = _load_golden_set(args.golden_set, args.limit)
+    if args.workers <= 0:
+        raise ValueError("--workers must be positive.")
+    if args.limit and args.ids:
+        raise ValueError("--limit and --ids cannot be combined.")
+    all_items = _load_golden_set(args.golden_set, None)
+    if args.ids:
+        requested_ids = set(args.ids)
+        known_ids = {item["id"] for item in all_items}
+        unknown_ids = requested_ids - known_ids
+        if unknown_ids:
+            raise ValueError(
+                f"Unknown golden-set IDs: {', '.join(sorted(unknown_ids))}."
+            )
+        items = [item for item in all_items if item["id"] in requested_ids]
+    else:
+        items = all_items[: args.limit] if args.limit else all_items
     client = create_client(settings)
     _, index, stuffing_context = _load_corpus(
         args.documents_dir,
@@ -451,8 +480,11 @@ def main() -> None:
         client,
     )
     modes = ("stuffing", "rag") if args.mode == "both" else (args.mode,)
-    rows = [
-        _run_item(
+    jobs = [(mode, item) for mode in modes for item in items]
+
+    def execute(job):
+        mode, item = job
+        return _run_item(
             mode=mode,
             item=item,
             index=index,
@@ -462,9 +494,41 @@ def main() -> None:
             settings=settings,
             skip_judge=args.skip_judge,
         )
-        for mode in modes
-        for item in items
-    ]
+
+    if args.workers == 1:
+        rows = [execute(job) for job in jobs]
+    else:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=args.workers
+        ) as executor:
+            rows = list(executor.map(execute, jobs))
+
+    report_items = items
+    if args.resume_json:
+        prior = json.loads(args.resume_json.read_text(encoding="utf-8"))
+        expected_settings = {
+            "chat_model": settings.chat_model,
+            "embedding_model": settings.embedding_model,
+            "chunk_size_tokens": settings.chunk_size_tokens,
+            "chunk_overlap_tokens": settings.chunk_overlap_tokens,
+            "top_k": top_k,
+        }
+        if prior.get("settings") != expected_settings:
+            raise ValueError("Resume result settings do not match the current run.")
+        replacement_keys = {(row["mode"], row["id"]) for row in rows}
+        rows = [
+            row
+            for row in prior.get("items", [])
+            if (row["mode"], row["id"]) not in replacement_keys
+        ] + rows
+        item_order = {item["id"]: position for position, item in enumerate(all_items)}
+        mode_order = {"stuffing": 0, "rag": 1}
+        rows.sort(key=lambda row: (mode_order[row["mode"]], item_order[row["id"]]))
+        modes = tuple(
+            mode for mode in ("stuffing", "rag") if any(row["mode"] == mode for row in rows)
+        )
+        report_items = all_items
+
     aggregates = [
         _aggregate(mode, [row for row in rows if row["mode"] == mode])
         for mode in modes
@@ -472,7 +536,7 @@ def main() -> None:
     _write_markdown(
         args.output,
         settings,
-        items,
+        report_items,
         aggregates,
         rows,
         top_k,
