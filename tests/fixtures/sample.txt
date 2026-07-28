@@ -1,0 +1,5 @@
+Binary search repeatedly halves a sorted search interval.
+Its worst-case running time is O(log n).
+
+Hash tables provide expected O(1) lookup under suitable hashing assumptions.
+
