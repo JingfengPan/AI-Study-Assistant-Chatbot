@@ -1,79 +1,217 @@
 # AI Study Assistant Chatbot
 
-This application is designed to help students efficiently process and interact with course materials using GPT-4-turbo. The app provides an interactive UI built with Streamlit, enabling file uploads (for reading materials or homework) and follow-up chat functionality with maintained context and conversation history.
+A citation-grounded, multi-document RAG application that lets students upload
+course materials, generate summaries, and ask questions answered from retrieved
+pages, slides, paragraphs, and line ranges.
 
-## Features
+![AI Study Assistant Streamlit interface](docs/app-screenshot.png)
 
-- **Home Page**  
-  - Users enter the course name (e.g., "Generative AI") via a text input field.
-  - A submit button moves the user to the next page.
+## Key capabilities
 
-- **Upload File Page**  
-  - Provides a switchable upload area for two types of files: **Reading Materials** and **Homework**.
-  - Supports file uploads for formats: **PPTX, DOCX, PDF,** and **TXT**.
-  - Files can be dragged and dropped or selected from local storage.
-  - Only one file per category can be uploaded at a time.
-  - Upon upload, the file is immediately processed and its content is extracted and summarized.
-  - Uploaded files appear in a clickable history, which can be used to revisit previous outputs and chats.
+- Ingests PDF, PPTX, DOCX, and TXT files with source-level locations.
+- Retains the original reading-material and homework summary experience.
+- Splits text into deterministic, overlapping, token-aware chunks.
+- Batches OpenAI embeddings and ranks normalized vectors with NumPy.
+- Searches across all documents in the current course.
+- Answers only from retrieved passages with validated `[1]`, `[2]` citations.
+- Displays authoritative filenames, locations, excerpts, and retrieval scores.
+- Uses an exact refusal when uploaded materials do not support an answer.
+- Treats instructions inside uploaded documents as untrusted content.
+- Avoids duplicate upload processing within the current session.
+- Compares RAG with the original summary/context-stuffing strategy.
+- Runs automated tests without paid API calls.
 
-- **Chatbot Page**  
-  - Users can ask follow-up questions regarding the current file.
-  - The chatbot uses GPT-4-turbo via a prepared internal prompt to generate consistent output.
-    - For Reading Materials: It produces a concise introduction and conclusion.
-    - For Homework: It extracts key points and generates additional ideas.
-  - The conversation context includes both the current file summary and any previous uploads.
+## Architecture
 
-- **Chat History / File Detail Page**  
-  - Displays the summary and QA history for a previously uploaded file.
-  - Users can ask new follow-up questions based on the historical context.
-  - Visual separators are used to clearly delineate each Q&A pair.
-
-## Innovations
-
-- **Enhanced Learning Efficiency**:  
-  The app focuses on making learning more efficient by allowing students to upload their course materials directly and interact with them using an AI chatbot. This addresses common challenges such as the inability to directly upload files in standard ChatGPT interfaces and difficulties in managing citations from extensive reading materials.
-
-- **Context Preservation Across Files**:  
-  The app maintains a global context that includes summaries from all previously uploaded files. This enables follow-up questions to leverage both the current file and historical context, providing a richer, more integrated learning experience.
-
-- **Handling Oversized Files**:  
-  To overcome the token and string length limitations of the GPT-4-turbo API, oversized files are automatically split into manageable chunks. Each chunk is processed individually, and their outputs are merged to produce a final, coherent summary.
-
-## Installation & Usage
-
-### Prerequisites
-
-Make sure you have the following installed:
-- [Python 3.8+](https://www.python.org/)
-- [Streamlit](https://streamlit.io/)
-- [PyPDF2](https://pypi.org/project/PyPDF2/)
-- [python-pptx](https://pypi.org/project/python-pptx/)
-- [python-docx](https://pypi.org/project/python-docx/)
-- [chardet](https://pypi.org/project/chardet/)
-- OpenAI Python client
-
-You can install the required libraries using pip:
-
-```bash
-pip install streamlit PyPDF2 python-pptx python-docx chardet openai
+```mermaid
+flowchart LR
+    A[Upload] --> B[Extract source units]
+    B --> C[Token-aware chunks]
+    C --> D[Embedding matrix]
+    Q[Question] --> E[Query embedding]
+    D --> F[NumPy top-k retrieval]
+    E --> F
+    F --> G[Grounded prompt]
+    G --> H[Answer with citations]
 ```
 
-### Running the App
+The application remains a single Streamlit process. `ingest.py` handles pure
+file processing, `retrieve.py` owns embeddings and vector search, and `llm.py`
+isolates model calls, prompts, retries, usage metadata, and citation validation.
+This separation keeps external calls mockable and the retrieval logic easy to
+explain.
 
-To run the app, navigate to the project directory in your command line and use the following command:
+## Retrieval and citation design
+
+Each extracted `SourceUnit` represents one PDF page, PowerPoint slide, DOCX
+paragraph, or TXT line range. Units are independently split at token boundaries
+using 600-token chunks with 100-token overlap. A chunk ID is a deterministic
+SHA-256 hash of its source metadata and normalized text.
+
+Document embeddings are created in batches, converted to `float32`, and
+L2-normalized. Query vectors use the same normalization, so NumPy dot products
+produce cosine-similarity rankings:
+
+```python
+scores = embeddings @ query_embedding
+top_indices = np.argsort(-scores, kind="stable")[:top_k]
+```
+
+Only the top retrieved passages, the current question, course name, and bounded
+recent history reach the answer model. Uploaded passages are explicitly marked
+as untrusted reference data. Citation numbers are range-checked after generation,
+while the UI derives displayed filenames and locations from retrieval metadata
+rather than model-written text.
+
+## Evaluation methodology
+
+The committed corpus contains four original, redistribution-safe fixtures—one
+per supported file format—and a manually curated 30-question golden set:
+
+- 20 single-source answerable questions
+- 5 multi-source answerable questions
+- 5 unanswerable questions
+
+The runner builds document embeddings once, then executes either the previous
+summary/context-stuffing baseline, production RAG, or both. It reports:
+
+- Recall@1, Recall@3, and Recall@4
+- Deterministic reference-answer match
+- Citation validity and exact source accuracy
+- Refusal accuracy and false-refusal rate
+- API-reported prompt and total tokens
+- End-to-end latency
+- Supplemental LLM-judge correctness, groundedness, and relevance
+
+The judge sees only the question, concise reference answer, evidence excerpts,
+and generated answer—not entire documents. Its JSON scores are validated and
+fail closed after at most one repair attempt.
+
+## Measured results
+
+See [`eval/results.md`](eval/results.md). Results are generated by the real API
+evaluation command and are never filled with estimated values.
+
+## Installation
+
+Python 3.11 or newer is recommended.
+
+```bash
+python -m venv .venv
+```
+
+Activate the environment:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+```bash
+source .venv/bin/activate
+```
+
+Install pinned dependencies:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+## Configuration
+
+Copy `.env.example` to `.env` and add a project-scoped OpenAI API key:
+
+```dotenv
+OPENAI_API_KEY=
+OPENAI_CHAT_MODEL=gpt-5.6-terra
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+```
+
+Optional environment overrides include `CHUNK_SIZE_TOKENS`,
+`CHUNK_OVERLAP_TOKENS`, `RETRIEVAL_TOP_K`, `EMBEDDING_BATCH_SIZE`,
+`RECENT_MESSAGE_LIMIT`, and `REQUEST_TIMEOUT_SECONDS`.
+
+Never commit `.env` or `.streamlit/secrets.toml`. Uploaded text is sent to the
+configured OpenAI embedding and generation APIs.
+
+## Running the app
 
 ```bash
 streamlit run app.py
 ```
 
-The app will open in your default web browser. Follow the on-screen instructions to enter the course name, upload files, and interact with the chatbot.
+Enter a course name, select a material type, upload one or more documents, and
+choose **Process uploads**. Summaries appear under **Materials & summaries**;
+cross-document questions belong in **Grounded chat**.
 
-## Notes
+## Running tests
 
-- The app uses GPT-4-turbo as its LLM. Please ensure you have access to this model via your OpenAI API key.
-- File content is extracted using dedicated libraries for each file type.
-- The internal prompts are designed to produce consistent and structured outputs.
-- Oversized files are automatically split into chunks to avoid exceeding API limits, and the chunk outputs are merged to form the final summary.
-- There is no database to maintain the data, so if your refresh the webpage, all the data is gone.
-- The idea was discussed and verified with Professor Michael Spertus.
-- Make sure you replace the OpenAI API Key with your own in the "llm.py".
+```bash
+pytest -q
+```
+
+Tests use synthetic vectors and mocked model clients. They do not require an API
+key and do not make paid calls.
+
+## Running evaluation
+
+Run both strategies and write Markdown plus detailed JSON:
+
+```bash
+python -m eval.run_eval \
+  --mode both \
+  --golden-set eval/golden_set.json \
+  --output eval/results.md \
+  --output-json eval/results.json
+```
+
+Useful development flags:
+
+```text
+--mode stuffing|rag|both
+--top-k 4
+--limit 5
+--skip-judge
+--documents-dir eval/fixtures
+```
+
+`eval/results.json` is ignored because detailed answers may contain document
+content. The aggregate Markdown report is committed.
+
+## Project structure
+
+```text
+.
+├── app.py
+├── config.py
+├── ingest.py
+├── retrieve.py
+├── llm.py
+├── requirements.txt
+├── eval/
+│   ├── build_fixtures.py
+│   ├── fixtures/
+│   ├── golden_set.json
+│   ├── judge.py
+│   ├── run_eval.py
+│   └── results.md
+├── tests/
+└── .github/workflows/tests.yml
+```
+
+## Limitations
+
+- Extraction is text-only; image-only PDFs and text inside images need OCR.
+- Retrieval quality depends on the embedding model and chunk boundaries.
+- Model answers can still be wrong despite grounding instructions.
+- Citation structure and source matching do not guarantee entailment.
+- The evaluation corpus is intentionally small and synthetic.
+- Documents and chat remain session-only; refreshing Streamlit clears them.
+- The default index is an in-memory NumPy matrix, appropriate for a lightweight
+  interview-scale project rather than a large production corpus.
+
+## Future work
+
+Only measured needs should expand this design. Plausible next steps are optional
+SQLite persistence, better evaluation data from legally shareable real courses,
+and streaming that preserves citation validation and usage accounting.

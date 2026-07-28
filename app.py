@@ -43,6 +43,18 @@ st.set_page_config(
     page_icon="📚",
     layout="wide",
 )
+st.markdown(
+    """
+    <style>
+    h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.08 !important;
+        white-space: normal !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 def _initialize_state() -> None:
@@ -342,8 +354,8 @@ def main() -> None:
     _initialize_state()
     st.title("AI Study Assistant")
     st.caption(
-        "Upload course materials, keep the original summaries, and ask questions "
-        "answered from retrieved pages, slides, paragraphs, and line ranges."
+        "Summarize course materials and ask citation-grounded questions across "
+        "documents."
     )
     try:
         settings = get_settings()
@@ -368,4 +380,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
