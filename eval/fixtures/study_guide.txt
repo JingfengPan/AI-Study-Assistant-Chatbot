@@ -1,0 +1,40 @@
+Study Design and Statistics
+A population is the complete group a study aims to understand.
+A sample is the subset of the population that is actually observed.
+Random sampling reduces selection bias in estimating population properties.
+A parameter describes a population.
+A statistic describes a sample.
+The mean is the arithmetic average.
+The median is the middle ordered value.
+The standard deviation measures spread around the mean.
+An outlier can influence the mean more strongly than the median.
+Correlation measures association but does not establish causation.
+A confounder is related to both an exposure and an outcome.
+Random assignment helps balance confounders between treatment groups.
+Blinding reduces behavior and measurement changes caused by knowing assignments.
+A control group provides a comparison for the treatment group.
+A null hypothesis represents a baseline claim.
+A p-value is computed assuming the null hypothesis is true.
+Statistical significance does not necessarily imply practical importance.
+Confidence intervals communicate estimate uncertainty.
+A 95 percent confidence procedure captures the true parameter in 95 percent of repeated samples.
+Machine Learning Study Guide
+Supervised learning uses labeled examples.
+Unsupervised learning seeks structure in unlabeled data.
+Classification predicts categories while regression predicts numeric values.
+Training data is used to fit model parameters.
+Validation data supports model and hyperparameter selection.
+Test data estimates performance after model choices are fixed.
+Overfitting occurs when a model learns noise and fails to generalize.
+Regularization discourages overly complex fitted models.
+Cross-validation rotates held-out folds to estimate generalization.
+Precision is the fraction of predicted positives that are correct.
+Recall is the fraction of actual positives that are found.
+The F1 score is the harmonic mean of precision and recall.
+Accuracy can mislead on severely imbalanced classes.
+A confusion matrix counts predicted and actual class combinations.
+Feature scaling can matter for distance-based algorithms.
+Gradient descent updates parameters opposite the loss gradient.
+A learning rate controls the size of each gradient update.
+Data leakage exposes information unavailable at real prediction time.
+A reproducible experiment records data, code, parameters, and random seeds.

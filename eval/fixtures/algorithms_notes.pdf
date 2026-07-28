@@ -1,0 +1,121 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 13 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 242 >>
+stream
+BT
+/F1 12 Tf
+72 730 Td
+15 TL
+(Algorithms Notes - Search) Tj
+T*
+(Linear search examines items sequentially and takes O\(n\) time in the worst case.) Tj
+T*
+(Binary search requires sorted input and halves the remaining interval each step.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 13 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 212 >>
+stream
+BT
+/F1 12 Tf
+72 730 Td
+15 TL
+(Sorting) Tj
+T*
+(Merge sort divides the input, sorts each half, and merges the results.) Tj
+T*
+(Its worst-case running time is O\(n log n\) and it needs O\(n\) auxiliary space.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 13 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 220 >>
+stream
+BT
+/F1 12 Tf
+72 730 Td
+15 TL
+(Graphs) Tj
+T*
+(Breadth-first search uses a queue and finds shortest paths in unweighted graphs.) Tj
+T*
+(Depth-first search uses a stack or recursion and is useful for cycle detection.) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 13 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 192 >>
+stream
+BT
+/F1 12 Tf
+72 730 Td
+15 TL
+(Dynamic Programming) Tj
+T*
+(Dynamic programming stores solutions to overlapping subproblems.) Tj
+T*
+(Memoization is top-down while tabulation is bottom-up.) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 13 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 203 >>
+stream
+BT
+/F1 12 Tf
+72 730 Td
+15 TL
+(Hashing) Tj
+T*
+(A hash table provides expected O\(1\) lookup with a suitable hash function.) Tj
+T*
+(Separate chaining stores colliding keys in per-bucket collections.) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000140 00000 n 
+0000000267 00000 n 
+0000000560 00000 n 
+0000000687 00000 n 
+0000000950 00000 n 
+0000001077 00000 n 
+0000001348 00000 n 
+0000001476 00000 n 
+0000001720 00000 n 
+0000001849 00000 n 
+0000002104 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+2175
+%%EOF
